@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | BlobGuard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="auth-page">
+
+    <!-- Navbar -->
+    <nav class="auth-nav">
+        <a href="/" class="logo">
+            BlobGuard<span>.</span>
+        </a>
+
+        <a href="/" class="back-link">
+            ← Back to Home
+        </a>
+    </nav>
+
+    <!-- Signup Form -->
+    <main class="auth-main">
+
+        <div class="auth-card">
+
+            <div class="auth-icon">✦</div>
+
+            <p class="auth-eyebrow">
+                JOIN BLOBGUARD
+            </p>
+
+            {% if message %}
+              <p class="auth-message">{{ message }}</p>
+            {% endif %}
+
+            <h1>Create your account</h1>
+
+            <p class="auth-subtitle">
+                Start protecting your Azure storage with confidence.
+            </p>
+
+            <form action="/signup" method="POST" onsubmit="return validateSignup()">
+
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your full name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="you@example.com"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        minlength="8"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">
+                        Confirm Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        placeholder="Re-enter your password"
+                        minlength="8"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="auth-submit">
+                    Create Account →
+                </button>
+
+            </form>
+
+            <div class="auth-divider">
+                <span>Already have an account?</span>
+            </div>
+
+            <a href="/login" class="auth-switch">
+                Sign in to BlobGuard
+            </a>
+
+            <div class="auth-security">
+                <span>🔒</span>
+                Your storage deserves an extra layer of protection.
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="auth-footer">
+        © 2026 BlobGuard. Built for safer cloud storage.
+    </footer>
+
+</div>
+
+
+<script>
+    function validateSignup() {
+
+        const password = document.getElementById("password").value;
+
+        const confirmPassword = document.getElementById("confirm_password").value;
+
+        if (password !== confirmPassword) {
+
+            alert("Passwords do not match. Please try again.");
+
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+</body>
+</html>

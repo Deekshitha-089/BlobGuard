@@ -1,0 +1,1123 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BlobGuard | Protection Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-page">
+
+<div class="app">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <a href="/" class="brand">
+            <div class="brand-icon">B</div>
+            <span>BlobGuard</span>
+        </a>
+
+        <div class="sidebar-intro">
+            <p class="menu-label">YOUR WORKSPACE</p>
+            <p class="sidebar-description">
+                Manage your files and understand how they are protected.
+            </p>
+        </div>
+
+        <nav class="navigation" aria-label="Main navigation">
+
+            <a href="#overview" class="nav-item active">
+                <span class="nav-symbol">▦</span>
+                <span>Overview</span>
+            </a>
+
+            <a href="#file-management" class="nav-item">
+                <span class="nav-symbol">▤</span>
+                <span>My Files</span>
+            </a>
+
+            <a href="#version-history" class="nav-item">
+                <span class="nav-symbol">◷</span>
+                <span>Version History</span>
+            </a>
+
+            <a href="#recovery-center" class="nav-item">
+                <span class="nav-symbol">↻</span>
+                <span>Recovery Center</span>
+            </a>
+
+            <a href="#protection" class="nav-item">
+                <span class="nav-symbol">♧</span>
+                <span>Protection Settings</span>
+            </a>
+
+            <a href="#activity" class="nav-item">
+                <span class="nav-symbol">≡</span>
+                <span>Activity</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="connection">
+
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>Azure Blob Storage</strong>
+                    <small>Protection configured</small>
+                </div>
+
+            </div>
+
+            <p class="sidebar-footer">
+                BlobGuard v1.0
+                <br>
+                Azure-powered file protection
+            </p>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="main">
+
+        <!-- TOP BAR -->
+
+        <header class="topbar" id="overview">
+
+            <div class="topbar-heading">
+
+                <p class="breadcrumb">
+                    Workspace / Overview
+                </p>
+
+                <h1>Protection Dashboard</h1>
+
+                <p class="topbar-subtitle">
+                    Your central place to manage, protect and recover files.
+                </p>
+
+            </div>
+
+            <div class="profile">
+
+                <div class="profile-avatar">
+                    {{ user_name[0]|upper if user_name else 'U' }}
+                </div>
+
+                <div class="profile-details">
+                    <strong>
+                        {{ user_name if user_name else 'User' }}
+                    </strong>
+                    <small>BlobGuard Workspace</small>
+                </div>
+
+                <a href="{{ url_for('logout') }}"
+                   class="logout-btn">
+                    Logout
+                </a>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= WELCOME ================= -->
+
+        <section class="welcome">
+
+            <div class="welcome-content">
+
+                <div class="welcome-label">
+                    <span class="welcome-dot"></span>
+                    YOUR DATA PROTECTION WORKSPACE
+                </div>
+
+                <h2>
+                    Your files deserve
+                    <span>a second chance.</span>
+                </h2>
+
+                <p>
+                    BlobGuard works with Azure Blob Storage to help you
+                    preserve earlier file versions, protect against
+                    accidental deletion, and recover data when needed.
+                </p>
+
+                <div class="welcome-actions">
+
+                    <button type="button"
+                            class="primary-btn"
+                            onclick="showUploadMessage()">
+                        <span>＋</span>
+                        Upload a file
+                    </button>
+
+                    <a href="#recovery-center"
+                       class="secondary-btn">
+                        Explore recovery
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="welcome-visual">
+
+                <div class="welcome-shield">✓</div>
+
+                <strong>Protected by Azure</strong>
+
+                <span>
+                    Versioning · Soft delete · Recovery
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= QUICK EXPLANATION ================= -->
+
+        <section class="info-banner">
+
+            <div class="info-banner-icon">i</div>
+
+            <div>
+                <strong>What does BlobGuard do?</strong>
+
+                <p>
+                    Think of BlobGuard as a safety system for your files.
+                    Azure stores your files and their available versions.
+                    BlobGuard helps you understand that protection and
+                    access recovery features through one workspace.
+                </p>
+            </div>
+
+        </section>
+
+
+        <!-- ================= STORAGE SUMMARY ================= -->
+
+        <section class="dashboard-section" id="my-files">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="section-eyebrow">YOUR STORAGE</p>
+
+                    <h3>Storage at a glance</h3>
+
+                    <p>
+                        Understand how much data you have stored and
+                        how many previous versions are available.
+                    </p>
+                </div>
+
+                <span class="section-tag">
+                    Azure Storage
+                </span>
+
+            </div>
+
+
+            <div class="stats-grid">
+
+                <!-- TOTAL FILES -->
+
+                <article class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-icon blue">▤</span>
+                        <span class="stat-label">Total files</span>
+                    </div>
+
+                    <h3 id="totalFiles">—</h3>
+
+                    <p>
+                        Number of files currently stored in your
+                        BlobGuard container.
+                    </p>
+
+                    <div class="stat-footnote">
+                        <span>ⓘ</span>
+                        Counts will appear after Azure is connected.
+                    </div>
+
+                </article>
+
+
+                <!-- VERSIONS -->
+
+                <article class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-icon purple">◷</span>
+                        <span class="stat-label">Saved versions</span>
+                    </div>
+
+                    <h3 id="totalVersions">—</h3>
+
+                    <p>
+                        Earlier copies of files that Azure has retained
+                        through blob versioning.
+                    </p>
+
+                    <div class="stat-footnote">
+                        <span>ⓘ</span>
+                        Each version represents an earlier file state.
+                    </div>
+
+                </article>
+
+
+                <!-- RECOVERY WINDOW -->
+
+                <article class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-icon green">↻</span>
+                        <span class="stat-label">Recovery window</span>
+                    </div>
+
+                    <h3>30 days</h3>
+
+                    <p>
+                        Configured point-in-time restore target for
+                        supported blob data.
+                    </p>
+
+                    <div class="stat-footnote">
+                        <span>ⓘ</span>
+                        Actual restore availability depends on Azure
+                        settings and supported data.
+                    </div>
+
+                </article>
+
+
+                <!-- STORAGE USAGE -->
+
+                <article class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-icon orange">▥</span>
+                        <span class="stat-label">Storage used</span>
+                    </div>
+
+                    <h3 id="storageUsed">—</h3>
+
+                    <p>
+                        Total storage space currently occupied by
+                        your stored data and versions.
+                    </p>
+
+                    <div class="stat-footnote">
+                        <span>ⓘ</span>
+                        Usage will appear after Azure is connected.
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= MY FILES ================= -->
+
+        <section class="dashboard-section" id="file-management">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="section-eyebrow">FILE MANAGEMENT</p>
+
+                    <h3>My files</h3>
+
+                    <p>
+                        View your stored files and understand the
+                        protection available for each one.
+                    </p>
+                </div>
+
+                <button type="button"
+                        class="outline-btn"
+                        onclick="showUploadMessage()">
+                    ＋ Upload file
+                </button>
+
+            </div>
+
+
+            <div class="section-card">
+
+                <div class="table-intro">
+
+                    <div>
+                        <strong>Your stored files</strong>
+
+                        <p>
+                            Select a file to review its version history
+                            and available recovery options.
+                        </p>
+                    </div>
+
+                    <span class="coming-tag">
+                        Azure integration pending
+                    </span>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>FILE NAME</th>
+                                <th>SIZE</th>
+                                <th>LAST MODIFIED</th>
+                                <th>VERSIONS</th>
+                                <th>PROTECTION</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="filesTable">
+
+                            <tr>
+                                <td colspan="5" class="empty-state">
+
+                                    <div class="empty-icon">▤</div>
+
+                                    <strong>
+                                        Your files will appear here
+                                    </strong>
+
+                                    <p>
+                                        Once file upload and Azure
+                                        integration are connected, you
+                                        will see your files, sizes,
+                                        modification dates and versions.
+                                    </p>
+
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= VERSION HISTORY ================= -->
+
+        <section class="dashboard-section" id="version-history">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="section-eyebrow">VERSION CONTROL</p>
+
+                    <h3>Version history</h3>
+
+                    <p>
+                        Every saved version is a possible way back
+                        to an earlier state of your file.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="section-card version-explainer">
+
+                <div class="version-intro-icon">◷</div>
+
+                <div class="version-explainer-content">
+
+                    <h4>What is a file version?</h4>
+
+                    <p>
+                        When blob versioning is enabled, Azure can
+                        preserve an earlier version when a blob is
+                        overwritten. This means an accidental change
+                        does not necessarily mean the original content
+                        is lost.
+                    </p>
+
+                    <div class="version-example">
+
+                        <div class="example-heading">
+                            <span class="example-file-icon">PDF</span>
+
+                            <div>
+                                <strong>Example: Report.pdf</strong>
+                                <small>Illustration of version history</small>
+                            </div>
+
+                        </div>
+
+                        <div class="version-timeline">
+
+                            <div class="timeline-item">
+
+                                <span class="timeline-marker"></span>
+
+                                <div>
+                                    <strong>Version 1</strong>
+                                    <p>
+                                        Original file uploaded.
+                                    </p>
+                                </div>
+
+                                <span class="timeline-label">
+                                    Earlier
+                                </span>
+
+                            </div>
+
+                            <div class="timeline-item">
+
+                                <span class="timeline-marker"></span>
+
+                                <div>
+                                    <strong>Version 2</strong>
+                                    <p>
+                                        A newer copy saved after an edit.
+                                    </p>
+                                </div>
+
+                                <span class="timeline-label">
+                                    Newer
+                                </span>
+
+                            </div>
+
+                            <div class="timeline-item current">
+
+                                <span class="timeline-marker"></span>
+
+                                <div>
+                                    <strong>Current version</strong>
+                                    <p>
+                                        The version currently shown
+                                        when the file is opened.
+                                    </p>
+                                </div>
+
+                                <span class="timeline-label">
+                                    Current
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="version-note">
+                            <span>ⓘ</span>
+
+                            <p>
+                                These versions are an illustrative
+                                example, not actual versions from
+                                your Azure container. Real version
+                                IDs and timestamps will appear after
+                                integration.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= RECOVERY CENTER ================= -->
+
+        <section class="dashboard-section" id="recovery-center">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="section-eyebrow">DATA RECOVERY</p>
+
+                    <h3>Recovery center</h3>
+
+                    <p>
+                        Understand which recovery option applies
+                        when a file is changed or deleted.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="recovery-grid">
+
+                <!-- VERSION RESTORE -->
+
+                <article class="recovery-card">
+
+                    <div class="recovery-card-icon blue">◷</div>
+
+                    <span class="recovery-type">
+                        OPTION 01
+                    </span>
+
+                    <h4>Restore a previous version</h4>
+
+                    <p>
+                        Use this when a file was edited or overwritten
+                        and you need its earlier contents.
+                    </p>
+
+                    <div class="recovery-example">
+
+                        <strong>Example</strong>
+
+                        <p>
+                            You accidentally replace a report with
+                            incorrect content. You can review its
+                            earlier versions and recover the needed
+                            version.
+                        </p>
+
+                    </div>
+
+                    <a href="#version-history" class="recovery-link">
+                        Understand version history →
+                    </a>
+
+                </article>
+
+
+                <!-- SOFT DELETE -->
+
+                <article class="recovery-card">
+
+                    <div class="recovery-card-icon green">↻</div>
+
+                    <span class="recovery-type">
+                        OPTION 02
+                    </span>
+
+                    <h4>Recover a deleted file</h4>
+
+                    <p>
+                        Blob soft delete retains deleted blobs for
+                        a configured period, allowing recovery
+                        before the retention period expires.
+                    </p>
+
+                    <div class="recovery-example">
+
+                        <strong>Example</strong>
+
+                        <p>
+                            You delete an important document by
+                            mistake. If it is still within the
+                            retention period, it may be recoverable.
+                        </p>
+
+                    </div>
+
+                    <a href="#protection" class="recovery-link">
+                        Understand soft delete →
+                    </a>
+
+                </article>
+
+
+                <!-- PITR -->
+
+                <article class="recovery-card">
+
+                    <div class="recovery-card-icon purple">⏱</div>
+
+                    <span class="recovery-type">
+                        OPTION 03
+                    </span>
+
+                    <h4>Point-in-time restore</h4>
+
+                    <p>
+                        Restore supported block blobs to an earlier
+                        point in time within the configured restore
+                        window.
+                    </p>
+
+                    <div class="recovery-example">
+
+                        <strong>Example</strong>
+
+                        <p>
+                            If several supported blobs are changed
+                            accidentally, point-in-time restore can
+                            help return them to an earlier state.
+                        </p>
+
+                    </div>
+
+                    <a href="#protection" class="recovery-link">
+                        Understand point-in-time restore →
+                    </a>
+
+                </article>
+
+            </div>
+
+
+            <div class="recovery-warning">
+
+                <span class="warning-icon">!</span>
+
+                <div>
+                    <strong>Before restoring a file</strong>
+
+                    <p>
+                        A restore can change the current state of
+                        stored data. Always verify the file,
+                        version or restore time before confirming
+                        a recovery operation.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= PROTECTION SETTINGS ================= -->
+
+        <section class="dashboard-section" id="protection">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="section-eyebrow">AZURE CONFIGURATION</p>
+
+                    <h3>Protection settings</h3>
+
+                    <p>
+                        Learn what each Azure protection feature does
+                        and how it contributes to your recovery plan.
+                    </p>
+                </div>
+
+                <span class="section-tag">
+                    Central India
+                </span>
+
+            </div>
+
+
+            <div class="section-card protection-card">
+
+                <div class="protection-intro">
+
+                    <div class="protection-shield">✓</div>
+
+                    <div>
+                        <h4>Azure protection overview</h4>
+
+                        <p>
+                            BlobGuard uses Azure Blob Storage's
+                            built-in protection features. The
+                            descriptions below explain their roles.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="protection-list">
+
+                    <!-- VERSIONING -->
+
+                    <article class="protection-item">
+
+                        <div class="protection-item-icon blue">
+                            ◷
+                        </div>
+
+                        <div class="protection-item-content">
+
+                            <div class="protection-title-row">
+
+                                <h4>Blob versioning</h4>
+
+                                <span class="status-badge">
+                                    Enabled
+                                </span>
+
+                            </div>
+
+                            <p>
+                                Automatically preserves previous
+                                blob versions when supported changes
+                                occur. Each version can contain
+                                different file content.
+                            </p>
+
+                            <small>
+                                Why it matters: Helps recover an
+                                earlier copy after an accidental
+                                overwrite.
+                            </small>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- BLOB SOFT DELETE -->
+
+                    <article class="protection-item">
+
+                        <div class="protection-item-icon green">
+                            ↻
+                        </div>
+
+                        <div class="protection-item-content">
+
+                            <div class="protection-title-row">
+
+                                <h4>Blob soft delete</h4>
+
+                                <span class="status-badge">
+                                    31 days
+                                </span>
+
+                            </div>
+
+                            <p>
+                                Retains deleted blobs during the
+                                configured 31-day retention period
+                                instead of immediately removing
+                                them permanently.
+                            </p>
+
+                            <small>
+                                Why it matters: Gives you time to
+                                recover a blob deleted by mistake.
+                            </small>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- CONTAINER SOFT DELETE -->
+
+                    <article class="protection-item">
+
+                        <div class="protection-item-icon purple">
+                            ▤
+                        </div>
+
+                        <div class="protection-item-content">
+
+                            <div class="protection-title-row">
+
+                                <h4>Container soft delete</h4>
+
+                                <span class="status-badge">
+                                    31 days
+                                </span>
+
+                            </div>
+
+                            <p>
+                                Retains deleted containers for the
+                                configured retention period, helping
+                                recover a container and its contents.
+                            </p>
+
+                            <small>
+                                Why it matters: Helps protect against
+                                accidental deletion of an entire
+                                container.
+                            </small>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- CHANGE FEED -->
+
+                    <article class="protection-item">
+
+                        <div class="protection-item-icon orange">
+                            ≡
+                        </div>
+
+                        <div class="protection-item-content">
+
+                            <div class="protection-title-row">
+
+                                <h4>Azure Change Feed</h4>
+
+                                <span class="status-badge">
+                                    Enabled
+                                </span>
+
+                            </div>
+
+                            <p>
+                                Records changes made to blobs,
+                                including supported create, update
+                                and delete operations.
+                            </p>
+
+                            <small>
+                                Why it matters: Helps investigate
+                                when data changes and understand
+                                storage activity.
+                            </small>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- PITR -->
+
+                    <article class="protection-item">
+
+                        <div class="protection-item-icon blue">
+                            ⏱
+                        </div>
+
+                        <div class="protection-item-content">
+
+                            <div class="protection-title-row">
+
+                                <h4>Point-in-time restore</h4>
+
+                                <span class="status-badge">
+                                    30-day target
+                                </span>
+
+                            </div>
+
+                            <p>
+                                Supports restoring eligible block
+                                blobs to an earlier time within
+                                the configured restore window.
+                            </p>
+
+                            <small>
+                                Why it matters: Helps recover from
+                                accidental or unwanted changes
+                                affecting multiple supported blobs.
+                            </small>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- LIFECYCLE -->
+
+                    <article class="protection-item">
+
+                        <div class="protection-item-icon orange">
+                            ▥
+                        </div>
+
+                        <div class="protection-item-content">
+
+                            <div class="protection-title-row">
+
+                                <h4>Lifecycle management</h4>
+
+                                <span class="status-badge">
+                                    60-day rule
+                                </span>
+
+                            </div>
+
+                            <p>
+                                The configured lifecycle rule
+                                manages older blob versions and
+                                deletes versions that meet the
+                                60-day age condition.
+                            </p>
+
+                            <small>
+                                Why it matters: Helps manage storage
+                                growth and the cost of retaining
+                                older versions.
+                            </small>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <div class="protection-disclaimer">
+
+                    <span>ⓘ</span>
+
+                    <p>
+                        These are the Azure settings configured
+                        for the BlobGuard project. Live status
+                        verification and configuration management
+                        from this dashboard will be connected
+                        through the Azure integration.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= ACTIVITY ================= -->
+
+        <section class="dashboard-section" id="activity">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="section-eyebrow">STORAGE MONITORING</p>
+
+                    <h3>Recent activity</h3>
+
+                    <p>
+                        Review recent file operations and changes
+                        recorded by the storage system.
+                    </p>
+                </div>
+
+                <button type="button"
+                        class="outline-btn"
+                        onclick="loadDashboard()">
+                    ↻ Refresh
+                </button>
+
+            </div>
+
+
+            <div class="section-card">
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>FILE</th>
+                                <th>OPERATION</th>
+                                <th>TIME</th>
+                                <th>STATUS</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="activityTable">
+
+                            <tr>
+                                <td colspan="4" class="empty-state">
+
+                                    <div class="empty-icon">≡</div>
+
+                                    <strong>
+                                        No activity to display yet
+                                    </strong>
+
+                                    <p>
+                                        Once Azure Change Feed and
+                                        the activity API are connected,
+                                        recorded file operations will
+                                        appear here.
+                                    </p>
+
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= FOOTER ================= -->
+
+        <footer class="dashboard-footer">
+
+            <div class="footer-brand">
+                <span class="footer-brand-icon">B</span>
+                <strong>BlobGuard</strong>
+            </div>
+
+            <p>
+                Protect. Recover. Always.
+            </p>
+
+            <span>
+                Built with Azure Blob Storage
+            </span>
+
+        </footer>
+
+    </main>
+
+</div>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+    function showUploadMessage() {
+        alert(
+            "File upload will be available after the Azure Blob Storage integration is connected."
+        );
+    }
+
+    async function loadDashboard() {
+        // Azure dashboard API integration will be added here.
+        console.log("Dashboard refresh requested.");
+    }
+
+</script>
+
+</body>
+</html>

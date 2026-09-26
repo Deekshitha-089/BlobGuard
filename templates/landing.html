@@ -1,0 +1,359 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BlobGuard | Protect. Recover. Always.</title>
+
+    <!-- Premium fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <header class="landing-nav">
+
+        <a href="/" class="landing-brand">
+            <span class="brand-mark">B</span>
+            <span>BlobGuard</span>
+        </a>
+
+        <nav class="landing-links">
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How it works</a>
+            <a href="#security">Security</a>
+        </nav>
+
+        <div class="landing-actions">
+            <a href="/login" class="login-link">Log in</a>
+            <a href="/signup" class="nav-cta">Get started ↗</a>
+        </div>
+
+    </header>
+
+
+    <!-- HERO SECTION -->
+    <main>
+
+        <section class="landing-hero">
+
+            <div class="hero-content">
+
+                <div class="hero-label">
+                    <span class="hero-dot"></span>
+                    AZURE-POWERED FILE PROTECTION
+                </div>
+
+                <h1>
+                    Your files deserve
+                    <span class="hero-highlight">
+                        a second chance.
+                    </span>
+                </h1>
+
+                <p class="hero-description">
+                    Accidental overwrite? Deleted file?
+                    BlobGuard helps you preserve previous file versions
+                    and recover important data with Azure Blob Storage.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="/signup" class="hero-primary">
+                        Protect my files
+                        <span>→</span>
+                    </a>
+
+                    <a href="#how-it-works" class="hero-secondary">
+                        See how it works
+                        <span>↗</span>
+                    </a>
+                </div>
+
+                <div class="hero-trust">
+                    <span class="trust-check">✓</span>
+                    Version history
+                    <span class="trust-divider">·</span>
+                    Soft delete
+                    <span class="trust-divider">·</span>
+                    Recovery tools
+                </div>
+
+            </div>
+
+
+            <!-- VISUAL PREVIEW -->
+            <div class="hero-visual">
+
+                <div class="visual-glow"></div>
+
+                <div class="floating-card file-card">
+
+                    <div class="file-icon">PDF</div>
+
+                    <div class="file-details">
+                        <strong>Project_Report.pdf</strong>
+                        <small>File protected</small>
+                    </div>
+
+                    <span class="file-check">✓</span>
+
+                </div>
+
+
+                <div class="shield-container">
+                    <div class="shield-circle">
+                        <svg viewBox="0 0 100 100"
+                             width="115"
+                             height="115"
+                             fill="none"
+                             aria-label="Data protection shield">
+
+                            <path d="M50 8 L85 22 V48
+                                     C85 70 70 85 50 95
+                                     C30 85 15 70 15 48
+                                     V22 Z"
+                                  fill="#4776A8"
+                                  stroke="#23395D"
+                                  stroke-width="3"/>
+
+                            <path d="M32 50 L44 62 L69 36"
+                                  stroke="white"
+                                  stroke-width="7"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+
+
+                <div class="floating-card recovery-card">
+
+                    <div class="recovery-icon">↻</div>
+
+                    <div class="file-details">
+                        <strong>Version recovered</strong>
+                        <small>Previous version restored</small>
+                    </div>
+
+                    <span class="recovery-check">✓</span>
+
+                </div>
+
+
+                <div class="visual-caption">
+                    <span class="hero-dot"></span>
+                    Your data. Your control.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FEATURE SECTION -->
+        <section class="landing-features" id="features">
+
+            <div class="section-intro">
+                <span class="section-eyebrow">BUILT FOR PEACE OF MIND</span>
+
+                <h2>
+                    More than storage.
+                    <span>It's a safety net.</span>
+                </h2>
+
+                <p>
+                    Everything you need to protect files against
+                    accidental changes and make recovery easier.
+                </p>
+            </div>
+
+
+            <div class="feature-grid">
+
+                <article class="feature-card">
+                    <div class="feature-icon blue-icon">◷</div>
+
+                    <h3>Every version matters</h3>
+
+                    <p>
+                        Keep previous copies of files so you can
+                        find the version you need after an overwrite.
+                    </p>
+
+                    <a href="/signup">Explore versioning →</a>
+                </article>
+
+
+                <article class="feature-card">
+                    <div class="feature-icon green-icon">↻</div>
+
+                    <h3>Recover with confidence</h3>
+
+                    <p>
+                        Review available versions and restore
+                        the file you need through a clear recovery flow.
+                    </p>
+
+                    <a href="/signup">Explore recovery →</a>
+                </article>
+
+
+                <article class="feature-card">
+                    <div class="feature-icon purple-icon">▤</div>
+
+                    <h3>Understand your storage</h3>
+
+                    <p>
+                        Track files, stored versions, retention
+                        settings and storage usage in one workspace.
+                    </p>
+
+                    <a href="/signup">Explore workspace →</a>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- HOW IT WORKS -->
+        <section class="how-section" id="how-it-works">
+
+            <div class="section-intro">
+                <span class="section-eyebrow">SIMPLE BY DESIGN</span>
+
+                <h2>
+                    Protection in
+                    <span>three simple steps.</span>
+                </h2>
+
+                <p>
+                    File recovery shouldn't be complicated.
+                    Here's how BlobGuard helps.
+                </p>
+            </div>
+
+
+            <div class="steps-grid">
+
+                <article class="step-card">
+                    <span class="step-number">01</span>
+                    <h3>Upload your file</h3>
+                    <p>
+                        Store your files in your Azure Blob
+                        Storage-backed workspace.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <span class="step-number">02</span>
+                    <h3>Keep previous versions</h3>
+                    <p>
+                        Blob versioning preserves earlier
+                        versions when a file is overwritten.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <span class="step-number">03</span>
+                    <h3>Recover when needed</h3>
+                    <p>
+                        Find a previous version and restore
+                        your file using the available recovery options.
+                    </p>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- SECURITY SECTION -->
+        <section class="security-section" id="security">
+
+            <div class="security-content">
+
+                <span class="section-eyebrow">
+                    BUILT AROUND AZURE
+                </span>
+
+                <h2>
+                    Your files stay in
+                    <span>your storage.</span>
+                </h2>
+
+                <p>
+                    BlobGuard is designed around Azure Blob Storage
+                    protection features, including versioning,
+                    soft delete, change feed and point-in-time restore.
+                </p>
+
+                <div class="security-points">
+                    <div>✓ Blob versioning</div>
+                    <div>✓ Soft delete and retention</div>
+                    <div>✓ Recovery management</div>
+                </div>
+
+            </div>
+
+            <div class="security-visual">
+                <div class="security-symbol">✓</div>
+                <span>AZURE BLOB STORAGE</span>
+                <strong>Protect. Recover. Always.</strong>
+            </div>
+
+        </section>
+
+
+        <!-- FINAL CALL TO ACTION -->
+        <section class="final-cta">
+
+            <span class="section-eyebrow">
+                YOUR NEXT FILE DESERVES PROTECTION
+            </span>
+
+            <h2>
+                Ready for a little
+                <span>more peace of mind?</span>
+            </h2>
+
+            <p>
+                Start protecting your files and make recovery
+                part of your workflow.
+            </p>
+
+            <a href="/signup" class="hero-primary">
+                Get started with BlobGuard →
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="landing-footer">
+
+        <a href="/" class="landing-brand">
+            <span class="brand-mark">B</span>
+            <span>BlobGuard</span>
+        </a>
+
+        <p>Protect. Recover. Always.</p>
+
+        <span>Built with Azure Blob Storage</span>
+
+    </footer>
+
+</body>
+</html>
