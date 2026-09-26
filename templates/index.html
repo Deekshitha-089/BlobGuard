@@ -166,7 +166,7 @@
 
                     <button type="button"
                             class="primary-btn"
-                            onclick="showUploadMessage()">
+                            onclick="document.getElementById('fileInput').click()">
                         <span>＋</span>
                         Upload a file
                     </button>
@@ -362,7 +362,7 @@
 
                 <button type="button"
                         class="outline-btn"
-                        onclick="showUploadMessage()">
+                        onclick="document.getElementById('fileInput').click()">
                     ＋ Upload file
                 </button>
 
@@ -1097,6 +1097,8 @@
 
         </footer>
 
+
+    <input type="file" id="fileInput" hidden onchange="uploadFile(this)">
     </main>
 
 </div>
@@ -1105,18 +1107,208 @@
 <!-- ================= JAVASCRIPT ================= -->
 
 <script>
+    function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, char => ({
+            "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        })[char]);
+    }
 
-    function showUploadMessage() {
-        alert(
-            "File upload will be available after the Azure Blob Storage integration is connected."
-        );
+    function formatBytes(bytes) {
+        if (!bytes) return "0 B";
+        const units = ["B", "KB", "MB", "GB", "TB"];
+        let size = Number(bytes), index = 0;
+        while (size >= 1024 && index < units.length - 1) {
+            size /= 1024; index++;
+        }
+        return `${size.toFixed(index === 0 ? 0 : 1)} ${units[index]}`;
+    }
+
+    function formatDate(value) {
+        if (!value) return "—";
+        const date = new Date(value);
+        return isNaN(date.getTime()) ? "—" : date.toLocaleString();
+    }
+
+    async function apiRequest(url, options = {}) {
+        const response = await fetch(url, { credentials: "same-origin", ...options });
+        if (response.status === 401) {
+            alert("Your session has expired. Please log in again.");
+            window.location.href = "/login";
+            throw new Error("Not logged in");
+        }
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.message || "Request failed.");
+        return data;
+    }
+
+    async function uploadFile(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const formData = new FormData();
+        formData.append("file", file);
+        try {
+            const result = await apiRequest("/api/upload", { method: "POST", body: formData });
+            alert(result.message || "Upload successful!");
+            await loadDashboard();
+        } catch (error) {
+            console.error("Upload error:", error);
+            alert(error.message || "Upload failed.");
+        } finally {
+            input.value = "";
+        }
     }
 
     async function loadDashboard() {
-        // Azure dashboard API integration will be added here.
-        console.log("Dashboard refresh requested.");
+        const table = document.getElementById("filesTable");
+        if (table) table.innerHTML = '<tr><td colspan="5" class="empty-state">Loading your Azure files...</td></tr>';
+        try {
+            const result = await apiRequest("/api/files");
+            const files = result.files || [];
+            renderFiles(files);
+            updateStatistics(files);
+        } catch (error) {
+            console.error("Dashboard loading error:", error);
+            if (table) table.innerHTML = `
+                <tr><td colspan="5" class="empty-state">
+                    <strong>Unable to load files</strong><p>${escapeHTML(error.message)}</p>
+                    <button class="outline-btn" onclick="loadDashboard()">Try again</button>
+                </td></tr>`;
+        }
     }
 
+    function renderFiles(files) {
+        const table = document.getElementById("filesTable");
+        if (!table) return;
+        if (!files.length) {
+            table.innerHTML = `<tr><td colspan="5" class="empty-state">
+                <div class="empty-icon">▤</div><strong>No files uploaded yet</strong>
+                <p>Upload a file to start protecting it with Azure.</p></td></tr>`;
+            return;
+        }
+        table.innerHTML = files.map(file => {
+            const name = escapeHTML(file.name);
+            const count = Number(file.version_count || 0);
+            return `<tr>
+                <td><strong>${name}</strong></td>
+                <td>${formatBytes(file.size)}</td>
+                <td>${escapeHTML(formatDate(file.last_modified))}</td>
+                <td><button class="outline-btn" data-action="versions" data-filename="${name}">${count} version(s)</button></td>
+                <td><span class="status-badge">Azure protected</span>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+                        <button class="outline-btn" data-action="download" data-filename="${name}">Download</button>
+                        <button class="outline-btn" data-action="delete" data-filename="${name}">Delete</button>
+                    </div>
+                </td></tr>`;
+        }).join("");
+    }
+
+    function updateStatistics(files) {
+        document.getElementById("totalFiles").textContent = files.length;
+        document.getElementById("totalVersions").textContent = files.reduce((sum, file) => sum + Number(file.version_count || 0), 0);
+        document.getElementById("storageUsed").textContent = formatBytes(files.reduce((sum, file) => sum + Number(file.size || 0), 0));
+    }
+
+    async function loadVersions(filename) {
+        try {
+            const result = await apiRequest("/api/versions?filename=" + encodeURIComponent(filename));
+            showVersionHistory(filename, result.versions || []);
+        } catch (error) {
+            console.error("Version history error:", error);
+            alert(error.message || "Could not load versions.");
+        }
+    }
+
+    function showVersionHistory(filename, versions) {
+        let panel = document.getElementById("versionResults");
+        if (!panel) {
+            panel = document.createElement("div");
+            panel.id = "versionResults";
+            panel.className = "section-card";
+            panel.style.marginTop = "20px";
+            document.getElementById("version-history").appendChild(panel);
+        }
+        if (!versions.length) {
+            panel.innerHTML = `<h4>${escapeHTML(filename)}</h4><p>No versions found.</p>`;
+        } else {
+            panel.innerHTML = `<h4>Versions of ${escapeHTML(filename)}</h4>
+                <p>Select a previous version to restore its content.</p>
+                <div class="table-wrapper"><table>
+                <thead><tr><th>VERSION</th><th>MODIFIED</th><th>SIZE</th><th>STATUS</th><th>ACTION</th></tr></thead>
+                <tbody>${versions.map((version, index) => `<tr>
+                    <td>${index + 1}</td><td>${escapeHTML(formatDate(version.last_modified))}</td>
+                    <td>${formatBytes(version.size)}</td><td>${version.is_current ? "Current" : "Previous"}</td>
+                    <td>${version.is_current ? "—" : `<button class="outline-btn" data-action="restore" data-filename="${escapeHTML(filename)}" data-version="${escapeHTML(version.version_id)}">Restore</button>`}</td>
+                </tr>`).join("")}</tbody></table></div>`;
+        }
+        panel.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    async function restoreVersion(filename, versionId) {
+        if (!confirm("Restore this previous version of " + filename + "?\n\nAzure will make the selected content the current version.")) return;
+        try {
+            const result = await apiRequest("/api/restore", {
+                method: "POST", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ filename: filename, version_id: versionId })
+            });
+            alert(result.message || "Version restored!");
+            await loadDashboard();
+            await loadVersions(filename);
+        } catch (error) {
+            console.error("Restore error:", error);
+            alert(error.message || "Restore failed.");
+        }
+    }
+
+    async function downloadFile(filename) {
+        try {
+            const response = await fetch("/api/download?filename=" + encodeURIComponent(filename), { credentials: "same-origin" });
+            if (response.status === 401) { window.location.href = "/login"; return; }
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({}));
+                throw new Error(error.message || "Download failed.");
+            }
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url; link.download = filename;
+            document.body.appendChild(link); link.click(); link.remove();
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Download error:", error);
+            alert(error.message || "Download failed.");
+        }
+    }
+
+    async function deleteFile(filename) {
+        if (!confirm("Delete " + filename + "?\n\nAzure soft delete may allow recovery during its configured retention period.")) return;
+        try {
+            const result = await apiRequest("/api/delete", {
+                method: "POST", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ filename: filename })
+            });
+            alert(result.message || "File deleted.");
+            await loadDashboard();
+        } catch (error) {
+            console.error("Delete error:", error);
+            alert(error.message || "Delete failed.");
+        }
+    }
+
+    document.getElementById("filesTable").addEventListener("click", function(event) {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+        const filename = button.dataset.filename;
+        if (button.dataset.action === "versions") loadVersions(filename);
+        if (button.dataset.action === "download") downloadFile(filename);
+        if (button.dataset.action === "delete") deleteFile(filename);
+    });
+
+    document.getElementById("version-history").addEventListener("click", function(event) {
+        const button = event.target.closest('button[data-action="restore"]');
+        if (button) restoreVersion(button.dataset.filename, button.dataset.version);
+    });
+
+    document.addEventListener("DOMContentLoaded", loadDashboard);
 </script>
 
 </body>

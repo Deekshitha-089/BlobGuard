@@ -1,0 +1,6 @@
+Flask
+Werkzeug
+python-dotenv
+azure-storage-blob
+azure-core
+gunicorn
